@@ -6,9 +6,10 @@ using namespace std;
 
 /*
 Modificari:
--formatare cod
--redenumire nume variabile
--redenumire nume functii
+-formatare cod (ex: stergere spatii inutile, aranjare acolade)
+-redenumire nume variabile (ex: nr_studenti/nr_Studenti -> nrStudenti)
+-redenumire nume functii (ex: getnume -> getNume)
+-reordonarea functiilor de intrare-iesire in functie de clasa de care apartin
 */
 
 class Student {
@@ -238,6 +239,50 @@ public:
     friend istream& operator >>(istream& in, Student& s);
 };
 
+//Operator intrare Student
+istream& operator >>(istream& in, Student& s)
+{
+    float sumaNote = 0;
+
+    cout << "Nume student:";
+    in >> s.nume;
+
+    cout << "Anul nasterii:";
+    in >> s.anNastere;
+    
+    cout << "Nr note:";
+    in >> s.nrNote;
+
+    delete[] s.note;
+
+    s.note = new float[s.nrNote];
+
+    cout << "Vector note:";
+    for (int i = 0; i < s.nrNote; i++) {
+        in >> s.note[i];
+        sumaNote += s.note[i];
+    }
+
+    s.medieBac = sumaNote / s.nrNote;
+
+    return in;
+}
+
+//Operator iesire Student
+ostream& operator <<(ostream& out, Student s)
+{
+    out << s.cod << " " << s.nume << " " << s.anNastere << " " << s.nrNote << endl;
+    if (s.note != NULL)
+    {
+        for (int i = 0; i < s.nrNote; i++)
+            cout << s.note[i] << " ";
+        out << endl;
+    }
+    out << s.medieBac << endl;
+
+    return out;
+}
+
 class StudentStrain : public Student
 {
 protected:
@@ -321,6 +366,7 @@ public:
 
 };
 
+//operator intrare StudentStrain
 istream& operator >>(istream& in, StudentStrain& ss) {
     in >> (Student&)ss;
     cout << "Tara provenienta: ";
@@ -334,56 +380,13 @@ istream& operator >>(istream& in, StudentStrain& ss) {
     return in;
 }
 
+//operator iesire StudentStrain
 ostream& operator <<(ostream& out, StudentStrain ss) {
     out << (Student)ss;
     out << "Tara provenienta: " << ss.taraProvenienta << "Tip sedere: " << ss.sedere << endl;
     out << "Taxele aferente celor 3 semestre: ";
     for (int i = 0; i < 3; i++)
         out << ss.taxe[i] << " ";
-    return out;
-}
-
-//Operator intrare
-istream& operator >>(istream& in, Student& s)
-{
-    float sumaNote = 0;
-
-    cout << "Nume student:";
-    in >> s.nume;
-
-    cout << "Anul nasterii:";
-    in >> s.anNastere;
-    
-    cout << "Nr note:";
-    in >> s.nrNote;
-
-    delete[] s.note;
-
-    s.note = new float[s.nrNote];
-
-    cout << "Vector note:";
-    for (int i = 0; i < s.nrNote; i++) {
-        in >> s.note[i];
-        sumaNote += s.note[i];
-    }
-
-    s.medieBac = sumaNote / s.nrNote;
-
-    return in;
-}
-
-//Operator iesire
-ostream& operator <<(ostream& out, Student s)
-{
-    out << s.cod << " " << s.nume << " " << s.anNastere << " " << s.nrNote << endl;
-    if (s.note != NULL)
-    {
-        for (int i = 0; i < s.nrNote; i++)
-            cout << s.note[i] << " ";
-        out << endl;
-    }
-    out << s.medieBac << endl;
-
     return out;
 }
 
