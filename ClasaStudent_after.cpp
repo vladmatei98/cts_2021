@@ -363,7 +363,6 @@ public:
 
     friend istream& operator >>(istream& in, StudentStrain& ss);
     friend ostream& operator <<(ostream& out, StudentStrain ss);
-
 };
 
 //operator intrare StudentStrain
